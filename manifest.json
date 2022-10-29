@@ -1,0 +1,70 @@
+{
+  "name": "Afiliaccion",
+  "short_name": "Afiliaccion",
+  "description": "Bienvenid@s a Afiliaccion",
+  "background_color": "#2B2B2B",
+  "theme_color": "#F0DB4F",
+  "orientation": "portrait",
+  "display": "standalone",
+  "id": "./index.php",
+  "start_url": "./index.php",
+  "scope": "./",
+  "lang": "es-MX",
+  "icons": [
+    {
+      "src": "./images/ico1024.png",
+      "sizes": "1024x823",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/ico512.png",
+      "sizes": "512x412",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/ico384.png",
+      "sizes": "384x309",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/ico256.png",
+      "sizes": "256x206",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/ico192.png",
+      "sizes": "192x155",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/ico144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/ico128.png",
+      "sizes": "128x103",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/ico96.png",
+      "sizes": "96x77",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/ico64.png",
+      "sizes": "64x51",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/ico32.png",
+      "sizes": "32x26",
+      "type": "image/png"
+    },
+    {
+      "src": "./images/favicon.ico",
+      "sizes": "256x200",
+      "type": "image/ico"
+    }
+  ]
+}
