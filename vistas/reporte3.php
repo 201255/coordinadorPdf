@@ -13,13 +13,15 @@
 
     <!-- Estilos personalizados -->
     <link href="../css/estilos.css" rel="stylesheet">
+
+    <!--<link rel="stylesheet" type="text/css" href="../bootstrap/css/bootstrap.min.css">-->
+    <script type="text/javascript" src="../bootstrap/js/jquery.min.js"></script>
+    <!--<script src="../bootstrap/js/bootstrap.min.js"></script>-->
+    <script src="../jspdf/dist/jspdf.min.js"></script>
+    <script src="../js/jspdf.plugin.autotable.min.js"></script>
 </head>
 
 <body class="bg-light">
-    <?php
-    //require("../config/conexion.php");
-    //require("../controlador2.php");
-    ?>
     <main>
         <div class="container">
             <div class="row align-items-center">
@@ -37,14 +39,26 @@
                                     <ul class="list-group list-group-flush anyClass">
                                         <li class="list-group-item my-2">
                                             <div>
-                                                <form method="post" class="form-inline">
-                                                    <input id="nomLider" type="text" name="nomLider" class="form-control mr-sm-2 my-2" onkeyup="this.value = this.value.toUpperCase();" maxlength="35" placeholder="Lider Seccional" />
+                                                <form method="post" class="form-inline" id="formulario">
+                                                    <div class="card-body">
+                                                        <input id="cveseccion" type="text" name="cveseccion" class="form-control mr-sm-2 my-2" onkeyup="this.value = this.value.toUpperCase();" maxlength="4" placeholder="Clave de Sección" />
+                                                    </div>
 
-                                                    <input type="text" NAME="cveSeccion" class="form-control mr-sm-2 my-2" type="text" onkeyup="this.value = this.value.toUpperCase();" maxlength="4" placeholder="Clave de Sección" />
+                                                    <div class="card-body">
+                                                        <input id="nomlider" type="text" name="nomlider" class="form-control mr-sm-2 my-2" onkeyup="this.value = this.value.toUpperCase();" maxlength="35" placeholder="Lider Seccional" />
+                                                    </div>
+
+                                                    <div class="card-body">
+                                                        <input type="submit" id="GenerarPDF" value="PDF" class="btn btn-default">
+                                                        <br>
+                                                    </div>
+                                                    <!-- <input id="nomLider" type="text" name="nomLider" class="form-control mr-sm-2 my-2" onkeyup="this.value = this.value.toUpperCase();" maxlength="35" placeholder="Lider Seccional" />
+
+                                                    <input type="text" id= "cveseccion" name="cveseccion" class="form-control mr-sm-2 my-2" type="text" onkeyup="this.value = this.value.toUpperCase();" maxlength="4" placeholder="Clave de Sección" />
 
                                                     <input name="btnImprimir" class="btn btn-primary btn mt-3" type="submit" value="Imprimir">
 
-                                                    <a href="../vistas/captura.html" class="btn btn-primary btn mt-3">Menu</a>
+                                                    <a href="../vistas/captura.html" class="btn btn-primary btn mt-3">Menu</a> -->
                                                 </form>
                                             </div>
                                         </li>
@@ -56,39 +70,71 @@
                 </div>
             </div>
         </div>
-        <?php
-        /*if (!empty($_POST["btnAgendar"])) {
-            if (empty($_POST["rfc"]) or empty($_POST["Curp"])) {
-                echo '<div class= "alert alert-danger"> Los Campos Estan Vacios</div>';
-            } else {
-                $rfc =  $_POST["rfc"];
-                $curp = $_POST["Curp"];
-                $apaterno = $_POST["Paterno"];
-                $amaterno = $_POST["Materno"];
-                $nombre = $_POST["Nombre"];
-                $fecha_nac = $_POST["Fecha"];
-                $sexo = $_POST["Sexo"];
-                $domicilio = $_POST["Domicilio"];
-                $localidad = $_POST["Localidad"];
-                $municipio = $_POST["Municipio"];
-                $estado = $_POST["Estado"];
-                $numtelefono = $_POST["Telefono"];
-                $cveElectoral = $_POST["CveElectoral"];
-                $idseccion = $_POST["Seccion"];
-
-                $sql = "INSERT INTO Simpatizantes(rfc,curp, apaterno, amaterno, nombre, fecha_nac, sexo, estado, municipio, localidad, domicilio,numtelefono,cveElectoral,idseccion) VALUES ('$rfc','$curp','$apaterno','$amaterno','$nombre','$fecha_nac','$sexo','$estado','$municipio','$localidad','$domicilio','$numtelefono','$cveElectoral','$idseccion')";
-
-                if (mysqli_query($conn, $sql)) {
-                    echo "Registro creado satisfactoriamente\n";
-                } else {
-                    echo "<br>" . "Error: " . $sql . "<br>" . mysqli_error($conn);
-                }
-            }
-
-            mysqli_close($conn);
-        }*/
-        ?>
     </main>
+    <?php
+    //require("../config/conexion.php");
+    include "./conexion.php";
+    ?>
+
+<script>
+        $("#formulario").submit(function() {
+            var pdf = new jsPDF();
+            var vseccion = $("#cveseccion").val();
+            var vlider = $("#nomlider").val();
+
+            $.ajax({
+                url: `constructor3.php/?user=${vlider}&muni=${vseccion}`,
+                dataType: "json",
+                context: document.body
+            }).done(function(resultado) {
+
+
+                var muni = resultado.municipio;
+                var colo = resultado.colonia;
+                var user = resultado.userName;
+                var cve = resultado.cvesec;
+
+                pdf.setFontSize(12);
+                pdf.text(10, 10, "Simpatizantes por Sección");
+                pdf.setFontSize(8);
+                pdf.text(10, 15, "Lider Seccional ");
+                pdf.text(30, 15, user);
+                pdf.text(10, 18, "Clave Seccion ");
+                pdf.text(30, 18, cve);
+                pdf.text(10, 21, "Municipio ");
+                pdf.text(30, 21, muni);
+                pdf.text(10, 24, "Localidad ");
+                pdf.text(30, 24, colo);
+                pdf.setFontSize(12);
+                var columns = ["Apellido Paterno","Nombres","Fecha Captura","Domicilio","Clave Electoral","Curp","Colonia","Sexo" ];
+
+                var data = [];
+                var temporal = [];
+
+                $.each(resultado.clientes, function(key, value) {
+                    temporal = [value['apaterno'],value['nombre'],value['fecha_sistema'],value['domicilio'], value['cveElectoral'],value['curp'],value['colonia'],value['sexo']];
+                    data.push(temporal);
+
+                });
+
+
+                pdf.autoTable(columns, data, {
+                    margin: {
+                        top: 35
+                    }
+                });
+
+                pdf.save('MiTablaCliente.pdf');
+
+
+
+
+            });
+            return false;
+
+
+        });
+    </script>
 </body>
 
 </html>
